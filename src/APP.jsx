@@ -13,6 +13,7 @@ export default class APP extends React.Component{
                     <Route path = '/' component = {Admin}/>
                     {/*<Route path = '/login' component = {Login}></Route>*/}
                     {/*<Route path = '/' component = {Admin}></Route>*/}
+                    {/*<Redirect to = '/login'/>*/}
                 </Switch>
             </BrowserRouter>
         );
