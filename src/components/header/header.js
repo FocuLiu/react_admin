@@ -85,7 +85,7 @@ class Header extends Component {
         const user = MemoryUtils.user;
         const {sysTime , dayPictureUrl , weather} = this.state;
         const path = this.props.location.pathname;
-        console.log(path);
+        // console.log(path);
         const title = this.getTitle(path);
         return (
             <div className='header'>

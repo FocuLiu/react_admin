@@ -122,4 +122,4 @@ class LoginForm extends React.Component {
     }
 }
 
-LoginForm = Form.create({})(LoginForm);
+LoginForm = Form.create()(LoginForm);
