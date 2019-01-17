@@ -6,7 +6,7 @@ import storageUtils from "./utils/storageUtils";
 /**
  * 读取内存中的user 如果存在,则保存在内存中
  */
-const user = storageUtils.getUser();
+let user = storageUtils.getUser();
 if (user){
     MemoryUtils.user = user;
 }

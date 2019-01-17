@@ -22,7 +22,7 @@ export default {
         setItem(USER_KEY , user)
     },
     getUser(){
-        getItem(USER_KEY)
+        return getItem(USER_KEY)
     },
     removeUser(){
         removeItem(USER_KEY)

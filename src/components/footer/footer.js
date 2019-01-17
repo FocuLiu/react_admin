@@ -1,8 +1,10 @@
 import React , {Component} from 'react'
 import './footer.less'
+import {withRouter} from "react-router-dom";
 
-export default class Footer extends Component{
+class Footer extends Component{
     render() {
+        console.log(this.props.location.pathname);
         return (
             <div className='footer'>
                 推荐使用谷歌浏览器,可以获得更加的页面操作体验
@@ -10,3 +12,4 @@ export default class Footer extends Component{
         );
     }
 }
+export default withRouter(Footer);

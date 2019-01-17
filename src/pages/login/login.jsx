@@ -15,7 +15,6 @@ export default class Login extends Component {
 
     //请求后台登陆
     login = async (username , password) => {
-        console.log(reqLogin);
         const result = await reqLogin(username, password);
         if (result.status === 0){
             const user = result.data;
