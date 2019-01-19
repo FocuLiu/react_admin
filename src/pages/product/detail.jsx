@@ -1,10 +1,13 @@
 import React , {Component} from 'react'
 
-export default class Pie extends Component{
+/**
+ * 详情
+ */
+export default class ProductDetail extends Component{
     render() {
         return (
             <div>
-                Pie
+                ProductDetail
             </div>
         );
     }

@@ -1,10 +1,13 @@
 import React , {Component} from 'react'
 
-export default class Pie extends Component{
+/**
+ * 商品添加和更新
+ */
+export default class ProductSaveUpdata extends Component{
     render() {
         return (
             <div>
-                Pie
+                ProductSaveUpdata
             </div>
         );
     }

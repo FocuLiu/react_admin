@@ -1,8 +1,7 @@
 import React from 'react';
-import {BrowserRouter ,Route ,Redirect,Switch} from "react-router-dom";
+import {BrowserRouter ,Route ,Switch} from "react-router-dom";
 import Login from './pages/login/login'
 import Admin from './pages/admin/admin'
-// import Component from "echarts/src/view/Component";
 
 export default class APP extends React.Component{
     render() {

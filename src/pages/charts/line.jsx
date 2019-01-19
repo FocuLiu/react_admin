@@ -1,6 +1,6 @@
 import React , {Component} from 'react'
 
-export default class Line extends React.Component{
+export default class Line extends Component{
     render() {
         return (
             <div>
