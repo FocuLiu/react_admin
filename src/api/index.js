@@ -12,11 +12,21 @@ export const reqLogin = (username, password) => ajax('/login', {username, passwo
 //添加用户
 export const reqAddUser = (user) => ajax('/manage/user/add',user,'POST');
 //获取一级/二级分类列表
-export const reqCategorys = (parentId) => ajax('manage/category/list' , {parentId});
+export const reqCategorys = (parentId) => ajax('/manage/category/list' , {parentId});
 //添加分类
-export const reqAddCategory = (parentId , categoryName) => ajax('manage/category/add' , {parentId , categoryName} , 'POST');
+export const reqAddCategory = (parentId , categoryName) => ajax('/manage/category/add' , {parentId , categoryName} , 'POST');
 //更新分类
-export const reqUpdataCategory = (categoryId , categoryName) => ajax('manage/category/update' , {categoryId , categoryName}, 'POST');
+export const reqUpdataCategory = (categoryId , categoryName) => ajax('/manage/category/update' , {categoryId , categoryName}, 'POST');
+//获取指定页商品分页列表
+export const reqProducts = (pageNum , pageSize) => ajax('/manage/product/list',{pageNum , pageSize});
+//搜索商品分页列表
+export const reqSearchProducts = (pageNum , pageSize , searchType , searchName) => ajax('/manage/product/search' , {
+    pageNum ,
+    pageSize ,
+    [searchType]: searchName
+});
+//删除图片
+export const reqDeleteImg = (name) => ajax('/manage/img/delete' , {name} , 'POST');
 
 export function reqWeather(city) {
     return new Promise((resolve, reject)=>{
