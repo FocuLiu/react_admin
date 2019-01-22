@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Card, Input, Icon, Button, Select, Table} from "antd";
-import {reqProducts ,reqSearchProducts} from '../../api/index'
+import {reqProducts ,reqSearchProducts , reqUpdateProductStatus} from '../../api/index'
 
 const Option = Select.Option;
 /**
@@ -13,6 +13,14 @@ export default class ProductIndex extends Component {
     searchType: 'productName', //默认搜索类型
     searchName: ''  // 搜算关键字
   };
+
+  updateProductStatus = async (productId , status) =>{
+    const result = await reqUpdateProductStatus(productId , status);
+    if (result.status === 0){
+      this.getProducts(this.pageNum || 1);
+    }
+  };
+
   //初始化表格所需要的数组
   initColumns = () => {
     this.columns = [
@@ -32,17 +40,29 @@ export default class ProductIndex extends Component {
       {
         title: '状态',
         dataIndex: 'status',
-        render: (status) => (
-          <span>
-            <Button>下架</Button>
-            <span>在手</span>
-          </span>
-        )
+        render: (status , product) => {
+        let btnText = '下架';
+        let statusText = '在售';
+
+        if (status === 2){
+          let btnText = '上架';
+          let statusText = '已下架';
+        }
+
+        status = status === 1 ? 2 : 1 ;
+          return(
+            <span>
+            <Button type='primary' onClick={() => this.updateProductStatus(product._id , status )}>{btnText}</Button>
+              &nbsp;&nbsp;
+              <span>{statusText}</span>
+            </span>
+          )
+        }
       },
       {
         title: '操作',
         render: (product) => (<span>
-            <a href="javascripts:;">详情</a>
+            <a href="javascripts:;" onClick={() =>this.props.history.push('/product/detail' , product)}>详情</a>
             &nbsp;&nbsp;&nbsp;
             <a href="javascripts:;" onClick={() => this.props.history.push('/product/saveupdata' , product)}>修改</a>
           </span>)

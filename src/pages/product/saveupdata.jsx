@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Icon, Form, Select, Input} from "antd";
-import {reqCategorys} from '../../api/index';
+import {Button, Icon, Form, Select, Input ,message} from "antd";
+import {reqCategorys , reqAddUpdataProduct} from '../../api/index';
 import RichTextEditor from './rich-text-editor';
 import PicturesWall from './pictures-wall';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -20,13 +20,17 @@ class ProductAddUpdata extends Component {
   getCategorys = async (parentId) => {
     const result = await reqCategorys(parentId);
     const categorys = result.data;
-    if (parentId === '0'){
+    if (parentId === '0') {
       this.setState({
         categorys: categorys
       })
-    }else {
+    } else {
       this.setState({
         SubCategorys: categorys
+      },() => {
+        this.props.form.setFieldsValue({
+          category2: '未选择'
+        })
       })
     }
   };
@@ -34,21 +38,21 @@ class ProductAddUpdata extends Component {
    * 根据状态中的分类数组组成Option
    */
   renderOptions = () => {
-    const {categorys , SubCategorys} = this.state;
+    const {categorys, SubCategorys} = this.state;
     const options = categorys.map(c => (
-    <Option key = {c._id} value = {c._id}>{c.name}</Option>
-  ));
+      <Option key={c._id} value={c._id}>{c.name}</Option>
+    ));
 
     const subOptions = SubCategorys.map(c => (
-    <Option key = {c._id} value = {c._id}>{c.name}</Option>
-  ));
-    return {options , subOptions};
+      <Option key={c._id} value={c._id}>{c.name}</Option>
+    ));
+    return {options, subOptions};
   };
 
   /**
    * 显示二级分类列表
    */
-  showSubCategory = (parentId) =>{
+  showSubCategory = (parentId) => {
     const product = this.props.location.state || {};
     product.categoryId = '';
     this.getCategorys(parentId);
@@ -57,20 +61,38 @@ class ProductAddUpdata extends Component {
   /**
    * 添加更新产品
    */
-  submit = () =>{
-    const values = this.props.form.getFieldsValue();
+  submit = async () => {
+    const {name, desc, price, category1, category2} = this.props.form.getFieldsValue();
+    let categoryId, pCategoryId = null;
+    if (!category2 || category2 === '未选择') {
+      pCategoryId = '0';
+    } else {  //当前要添加的商品是二级分类下的
+      categoryId = category2;
+      pCategoryId = category1
+    }
     //富文本边框的内容
     const detail = this.refs.editor.getContent();
     //得到所上传图片的文件名的数组
-    const imgs = this.refs.imgs.getItem();
-    console.log('values',values, detail);
+    const imgs = this.refs.imgs.getImg();
+    const product = {name, desc, price, pCategoryId, categoryId, detail, imgs};
+    const p = this.props.location.state;
+    if (p){
+      product._id = p._id;
+    }
+    const result = await reqAddUpdataProduct(product);
+    if (result.status === 0){
+      message.success('保存商品成功了')
+    }else {
+      message.error('保存商品失败了,请重新处理')
+    }
+    console.log('values', detail, imgs);
   };
 
   componentDidMount() {
     this.getCategorys('0');
     //如果当前是更新, 商品所属分类是二级分类
     const product = this.props.location.state;
-    if (product && product.pCategoryId !== '0'){
+    if (product && product.pCategoryId !== '0') {
       this.getCategorys(product.pCategoryId)
     }
   };
@@ -78,7 +100,7 @@ class ProductAddUpdata extends Component {
   render() {
     const {options, subOptions} = this.renderOptions();
     const product = this.props.location.state || {};
-    console.log('-------------0',product)
+    console.log('-------------0', product);
     const {getFieldDecorator} = this.props.form;
     const formItemLayout = {
       labelCol: {span: 2},
@@ -86,9 +108,9 @@ class ProductAddUpdata extends Component {
     };
     let initialValue1 = '未选择';
     let initialValue2 = '未选择';
-    if (product.pCategoryId === '0'){
+    if (product.pCategoryId === '0') {
       initialValue1 = product.categoryId
-    } else if (product.pCategoryId){
+    } else if (product.pCategoryId) {
       initialValue1 = product.pCategoryId;
       initialValue2 = product.categoryId || '未选择';
       console.log(product);
@@ -147,14 +169,14 @@ class ProductAddUpdata extends Component {
           </Item>
 
           <Item label='商品图片' labelCol={{span: 2}}>
-            <PicturesWall ref = 'imgs' imgs = {product.imgs}></PicturesWall>
+            <PicturesWall ref='imgs' imgs={product.imgs}></PicturesWall>
           </Item>
 
           <Item label='商品详情' labelCol={{span: 2}} wrapperCol={{span: 20}}>
-            <RichTextEditor ref = 'editor' detail = {product.detail}></RichTextEditor>
+            <RichTextEditor ref='editor' detail={product.detail}></RichTextEditor>
           </Item>
 
-            <Button type='primary' onClick={this.submit}>提交</Button>
+          <Button type='primary' onClick={this.submit}>提交</Button>
 
         </Form>
       </div>
